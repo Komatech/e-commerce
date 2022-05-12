@@ -10,6 +10,7 @@ dotenv.config()
 mongoose.connect(process.env.DB_CONNECT,()=>{console.log('connected')})
 
 // app middleware
+app.use(express.json())
 app.use('/api',route)
 
 // port
