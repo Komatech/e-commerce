@@ -6,5 +6,6 @@ router.get('/',(req,res)=>{
 })
 
 router.post('/setup',user.registerAdmin)
+router.post('/roles',user.roleSetup)
 
 module.exports = router
