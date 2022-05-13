@@ -5,7 +5,12 @@ router.get('/',(req,res)=>{
     res.send('Hello')
 })
 
+//                  Create Routes
 router.post('/setup',user.registerAdmin)
-router.post('/roles',user.roleSetup)
+router.post('/create/roles',user.roleSetup)
+router.post('/create/category',user.categorySetup)
+router.post('/create/subcategory',user.subcategorySetup)
+router.post('/create/minicategory',user.minicategorySetup)
+router.post('/create/product',user.productCreation)
 
 module.exports = router

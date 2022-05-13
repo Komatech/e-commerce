@@ -6,14 +6,15 @@ const productSchema = new mongoose.Schema({
     price:{type:String,required:true},
     quantity:{type:String,required:true},
     category:{
-        name:{type:String,required:true},
+        id:{type:String,required:true},
         subCategory:[{
-            name:{type:String,required:true},
+            id:{type:String,required:true},
             miniCategory:[{
-                name:{type:String,required:true}
+                id:{type:String,required:true}
             }]
         }]
     },
+    description:String,
     date:{
         type: Date,
         default: Date.now
