@@ -13,4 +13,7 @@ router.post('/create/subcategory',user.subcategorySetup)
 router.post('/create/minicategory',user.minicategorySetup)
 router.post('/create/product',user.productCreation)
 
+
+//                  Read Routes
+router.get('/users',user.viewAllUsers)
 module.exports = router

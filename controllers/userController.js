@@ -30,29 +30,53 @@ exports.registerAdmin = async function(req,res){
     // encrypt password
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(password,salt)
-    // insert into db
-    const roles = new Role({name:role})
+    // insert into database
+    // Check if role exists
+    const roleExists = await Role.findOne({name:role.toString().toLowerCase().trim()})
+    if(roleExists){
+        try{    
+            const user = new User({
+                name:name,
+                email: email,
+                password: hashPassword,
+                address: address,
+                telNo:telNo,
+                role_id: roleExists._id
+            })
+    
+            const savedUser = await user.save()
+            
+            res.status(200).send(savedUser)
+    
+        }catch(error){
+            res.status(400).send(error)
+        }
+    
+    }else{
 
-    try{
+        try{
+            const roles = new Role({name:roleName.toString().toLowerCase().trim()})
+            const savedRole = await roles.save()
 
-        const savedRole = await roles.save()
+            const user = new User({
+                name:name,
+                email: email,
+                password: hashPassword,
+                address: address,
+                telNo:telNo,
+                role_id: savedRole._id
+            })
 
-        const user = new User({
-            name:name,
-            email: email,
-            password: hashPassword,
-            address: address,
-            telNo:telNo,
-            role_id: savedRole._id
-        })
+            const savedUser = await user.save()
+            
+            res.status(200).send(savedUser)
 
-        const savedUser = await user.save()
-        
-        res.status(200).send(savedUser)
-
-    }catch(error){
-        res.status(400).send(error)
+        }catch(error){
+            res.status(400).send(error)
+        }
     }
+    
+    
 
 }
 
@@ -173,4 +197,45 @@ exports.productCreation = async (req,res)=>{
     }
 }
 
+//                                  Read Controllers
 
+
+// Read all Users
+exports.viewAllUsers = async (req,res)=>{
+    try{
+        const users = await User.find({}).select('name').select('email').select('telNo').select('role_id')
+        const allUsers = []
+        const item = {}
+
+        for(var i=0; i < users.length; i++){
+            roleName= await Role.findOne({_id:users[i].role_id}).select('name -_id')
+            item['name'] = users[i].name
+            item['email'] = users[i].email
+            item['telNo'] = users[i].telNo
+            item['role'] = roleName.name
+            
+            console.log(item)
+            allUsers.push(item)
+        }
+        
+       
+        res.status(200).send(allUsers)
+    }
+    catch(error){
+        res.status(400).send(error)
+    }
+}
+
+// View specific user
+
+// Read all Categories
+// View specific category
+
+// Read all Subcategories
+// View specific subcategory
+
+// Read all Minicategories
+// View specific minicategory
+
+// Read all Products
+// View specific product
