@@ -6,6 +6,7 @@ const Minicategory = require('../models/minicategory')
 const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const {userSchema} = require('../validate')
+const { object } = require('joi')
 
 // setup admin account
 exports.registerAdmin = async function(req,res){
@@ -214,8 +215,10 @@ exports.viewAllUsers = async (req,res)=>{
             item['telNo'] = users[i].telNo
             item['role'] = roleName.name
             
-            console.log(item)
-            allUsers.push(item)
+            let copiedItem = JSON.parse(JSON.stringify(item))
+            
+            allUsers.push(copiedItem)
+            
         }
         
        
