@@ -16,4 +16,9 @@ router.post('/create/product',user.productCreation)
 
 //                  Read Routes
 router.get('/users',user.viewAllUsers)
+router.get('/user/:id',user.viewOneUser)
+
+
+
+
 module.exports = router

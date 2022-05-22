@@ -210,6 +210,7 @@ exports.viewAllUsers = async (req,res)=>{
 
         for(var i=0; i < users.length; i++){
             roleName= await Role.findOne({_id:users[i].role_id}).select('name -_id')
+            item['id'] = users[i]._id
             item['name'] = users[i].name
             item['email'] = users[i].email
             item['telNo'] = users[i].telNo
@@ -232,25 +233,17 @@ exports.viewAllUsers = async (req,res)=>{
 // View specific user
 exports.viewOneUser = async (req,res)=>{
     try{
-        const users = await User.findOne({__id:req.params.id})
-        const allUsers = []
-        const item = {}
-
-        for(var i=0; i < users.length; i++){
-            roleName= await Role.findOne({_id:users[i].role_id}).select('name -_id')
-            item['name'] = users[i].name
-            item['email'] = users[i].email
-            item['telNo'] = users[i].telNo
-            item['role'] = roleName.name
-            
-            let copiedItem = JSON.parse(JSON.stringify(item))
-            
-            allUsers.push(copiedItem)
-            
+        const user = await User.findOne({__id:req.params.id})
+        const roleName= await Role.findOne({_id:user.role_id}).select('name -_id')
+        const data = {
+            'name':user.name,
+            'email':user.email,
+            'address':user.address,
+            'telNo':user.telNo,
+            'role': roleName.name
         }
-        
        
-        res.status(200).send(allUsers)
+        res.status(200).send(data)
     }
     catch(error){
         res.status(400).send(error)
