@@ -230,7 +230,32 @@ exports.viewAllUsers = async (req,res)=>{
 }
 
 // View specific user
+exports.viewOneUser = async (req,res)=>{
+    try{
+        const users = await User.findOne({__id:req.params.id})
+        const allUsers = []
+        const item = {}
 
+        for(var i=0; i < users.length; i++){
+            roleName= await Role.findOne({_id:users[i].role_id}).select('name -_id')
+            item['name'] = users[i].name
+            item['email'] = users[i].email
+            item['telNo'] = users[i].telNo
+            item['role'] = roleName.name
+            
+            let copiedItem = JSON.parse(JSON.stringify(item))
+            
+            allUsers.push(copiedItem)
+            
+        }
+        
+       
+        res.status(200).send(allUsers)
+    }
+    catch(error){
+        res.status(400).send(error)
+    }
+}
 // Read all Categories
 // View specific category
 
